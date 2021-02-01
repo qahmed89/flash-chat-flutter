@@ -29,6 +29,7 @@ class _ChatScreenState extends State<ChatScreen> {
         final DateTime now = DateTime.now();
         final DateFormat formatter = DateFormat.yMd().add_jms() ;
        final String formatted = formatter.format(now);
+       print (formatted);
        return formatted;
      }
   void getCurrentUser() async {
@@ -109,7 +110,7 @@ class MessagesStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('messages').orderBy("time").snapshots(),
+      stream: _firestore.collection('messages').orderBy("time" , descending: true).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -118,7 +119,7 @@ class MessagesStream extends StatelessWidget {
             ),
           );
         }
-        final messages = snapshot.data.docs.reversed;
+        final messages = snapshot.data.docs;
         List<MessageBubble> messageBubbles = [];
         for (var message in messages) {
           final messageText = message.data()['text'];
